@@ -48,3 +48,12 @@ export const removeList = [
   "Conservation Area",
   "Contagious Beast",
 ];
+
+export const traderUnlockExample = {
+  availableInGameEditions: [],
+  id: "5d78c49786f7745041358b58", // Needs custom id
+  index: 0,
+  target: "5c0647fdd443bc2504c2d371", // Set the trader ID here
+  type: "TraderUnlock",
+  unknown: false,
+};

@@ -24,21 +24,21 @@ export default function GlobalChanges(
     invertedTraders[Traders[name]] = name;
   });
 
-  const removeSet = new Set(removeList);
+  // const removeSet = new Set(removeList);
 
-  const newTraderQuests = { ...traderQuests };
+  // const newTraderQuests = { ...traderQuests };
 
-  for (const trader in newTraderQuests) {
-    newTraderQuests[trader] = newTraderQuests[trader].filter((quest) => {
-      if (removeSet.has(quest)) {
-        console.log(`Removing ${quest} from ${trader}`);
-        return false;
-      }
-      return true;
-    });
-  }
+  // for (const trader in newTraderQuests) {
+  //   newTraderQuests[trader] = newTraderQuests[trader].filter((quest) => {
+  //     if (removeSet.has(quest)) {
+  //       console.log(`Removing ${quest} from ${trader}`);
+  //       return false;
+  //     }
+  //     return true;
+  //   });
+  // }
 
-  saveToFile(newTraderQuests, "refDBS/traderQuestsAfterRemoval.json");
+  // saveToFile(newTraderQuests, "refDBS/traderQuestsAfterRemoval.json");
 
   // const traderQuestObject: Record<string, IQuest> = {};
   // //'Level', 'Quest', 'TraderLoyalty', 'TraderStanding'
