@@ -1,0 +1,98 @@
+{
+  "en": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "ch": {
+    "handover": "交出 <alternateName> (<alternateShortName>)",
+    "find": "找到<alternateName>",
+    "armor": "获得 <minDurability>-<maxDurability>% 耐久度的 <alternateName>",
+    "obtain": "获取 <alternateName>"
+  },
+  "cz": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "fr": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "ge": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "hu": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "it": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "jp": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "kr": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "pl": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "po": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "sk": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "es": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "es-mx": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "tu": {
+    "handover": "Hand over the <alternateName> (<alternateShortName>)",
+    "find": "Find <alternateName> in raid",
+    "armor": "Obtain <alternateName> with <minDurability>-<maxDurability>% durability",
+    "obtain": "Obtain <alternateName>"
+  },
+  "ru": {
+    "handover": "Передать <alternateName> (<alternateShortName>)",
+    "find": "Найти в рейде <alternateName>",
+    "armor": "Найти и передать <alternateName> <minDurability>-<maxDurability>% прочности",
+    "obtain": "Найти и передать <alternateName>"
+  }
+}

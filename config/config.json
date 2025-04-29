@@ -1,0 +1,14 @@
+{
+  "enable": true,
+  "baseQuantity": 4,
+  "countMultiplier": 0.5,
+  "questLevelUnlockModifier": 1,
+  "questExperienceModifier": 0.5,
+  "traderStandingRewardModifier": 1,
+  "itemRewardModifier": 1,
+  "killQuestCountModifier": 0.5,
+  "findItemQuestModifier": 0.1,
+  "plantTimeModifier": 0.2,
+  "replaceGunsmith": true,
+  "debug": false
+}
