@@ -1,7 +1,7 @@
 import { IReward } from "@spt/models/eft/common/tables/IReward";
 import { RewardType } from "@spt/models/enums/RewardType";
 import { generateMongoIdFromSeed } from "../Utils/utils";
-import { IQuestCondition } from "@spt/models/eft/common/tables/IQuest";
+import { IQuest, IQuestCondition } from "@spt/models/eft/common/tables/IQuest";
 
 export const traderUnlockSuccessByID = (traderID: string): IReward => ({
   availableInGameEditions: [],
@@ -43,3 +43,49 @@ export const AvailableForStartQuestRequirement = (
   target: questId,
   visibilityConditions: [],
 });
+
+export const IterateOverArrayAddingQuestReqs = (
+  quests: Record<string, IQuest>,
+  questIdList: string[],
+  quantity: number = 1
+) => {
+  const sets: string[][] = [];
+  for (let index = 0; index < questIdList.length; index += quantity) {
+    const currentIdsToAdd = questIdList.slice(index, index + quantity);
+    sets.push(currentIdsToAdd);
+  }
+
+  for (let index = 1; index < sets.length; index++) {
+    const prevSets = sets[index - 1];
+    const currentSet = sets[index];
+
+    currentSet.forEach((questId) => {
+      const quest = quests[questId];
+      if (quest) {
+        prevSets.forEach((prevId: string) => {
+          quest.conditions.AvailableForStart.push(
+            AvailableForStartQuestRequirement(prevId, prevId + "prevQuest")
+          );
+        });
+      } else {
+        console.warn("Quest not found: ", questId);
+      }
+    });
+
+    // console.log("adding ", prevSets, " to ", currentSet);
+  }
+  // console.log(sets);
+  // prevQuestIds = currentIdsToAdd;
+
+  // const prevQuestId = questIdList[index];
+  // const nextQuestId = questIdList[index + 1];
+  // const quest = quests[nextQuestId];
+  // if (quest) {
+  //   quest.conditions.AvailableForStart.push(
+  //     AvailableForStartQuestRequirement(
+  //       prevQuestId,
+  //       prevQuestId + "prevQuest"
+  //     )
+  //   );
+  // }
+};

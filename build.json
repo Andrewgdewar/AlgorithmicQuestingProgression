@@ -4,7 +4,7 @@
   "GitStatus": false,
   "ContainPlugin": false,
   "PluginFileName": "",
-  "PluginPath": "C:/3.8.0- Dev/Bepinex/Plugins/",
+  "PluginPath": "",
   "CopyBundles": false,
   "BuildZip": true,
   "BuildDir": "./dist",

@@ -23,7 +23,7 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: ${{ steps.versionstep.outputs.version }}
-        title: "QDT ${{ steps.versionstep.outputs.version }}"
+        title: "QuestingReimagined ${{ steps.versionstep.outputs.version }}"
         prerelease: false
         files: |
           ./dist/*.zip

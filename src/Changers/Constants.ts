@@ -1,20 +1,30 @@
 // Determines which quests unlock fences first quest
 export const fenceStartRequiredQuests = [
-  "The Punisher - Part 6",
-  "Painkiller",
-  "Chemical - Part 4",
-  "Eagle Eye",
-  "Farming - Part 4",
-  "The Key to Success",
-  "Nostalgia",
+  "Shortage",
+  // "The Punisher - Part 6",
+  // "Painkiller",
+  // "Chemical - Part 4",
+  // "Eagle Eye",
+  // "Farming - Part 4",
+  // "The Key to Success",
+  // "Nostalgia",
 ];
+
+// Key value pair of quest names and availableForFinishIds to loop over in order to delete a set number of tasks
+export const ReduceReqList = {
+  "Is This a Reference": [2, 8],
+  "Small Business - Part 1": [2],
+  Collector: [2, 15],
+  Escort: [2, 2],
+  "Beneath The Streets": [2],
+};
 
 // TODO: run test to see if the trader unlocks are correct
 // This is a list of quests that unlock traders, if empty, the trader is unlocked by default.
 export const TraderUnlockQuests = {
   PRAPOR: "",
   THERAPIST: "",
-  SKIER: "First in Line",
+  SKIER: "Shortage",
   PEACEKEEPER: "Background Check",
   MECHANIC: "Make ULTRA Great Again",
   RAGMAN: "Debut",
@@ -25,8 +35,23 @@ export const TraderUnlockQuests = {
   // BTR: "", // This trader is unlocked by finishing "Shipping Delay - Part 1"
 };
 
+export const TraderQuestProgressionQuantity = {
+  PRAPOR: 2,
+  THERAPIST: 2,
+  SKIER: 2,
+  PEACEKEEPER: 2,
+  MECHANIC: 2,
+  RAGMAN: 2,
+  JAEGER: 2,
+  FENCE: 1,
+  LIGHTHOUSEKEEPER: 1,
+  REF: 1,
+  BTR: 1, // This trader is unlocked by finishing "Shipping Delay - Part 1"
+};
+
 // These are deprecated quests, or problematic
 export const removeList = [
+  "This Is My Party",
   "A Healthy Alternative",
   "Kind of Sabotage",
   "The Stylish One",
