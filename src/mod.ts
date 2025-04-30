@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { DependencyContainer } from "tsyringe";
 import { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
-import { enable } from "../config/config.json";
-import GlobalChanges from "./Changers/GlobalChanges";
+import { enable, questOrderDebug } from "../config/config.json";
+import UpdateQuestOrder from "./Changers/UpdateQuestOrder";
 import { getNewMongoId, saveToFile } from "./Utils/utils";
 
 class QuestingReimagined implements IPostSptLoadMod {
   postSptLoad(container: DependencyContainer): void {
-    try {
-      if (enable) GlobalChanges(container);
-    } catch (error) {
-      console.error(error);
+    if (enable) {
+      try {
+        questOrderDebug && console.log("\n[QuestingReimagined] Starting up");
+        if (enable) UpdateQuestOrder(container);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 }

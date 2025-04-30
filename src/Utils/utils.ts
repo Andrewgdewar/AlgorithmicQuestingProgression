@@ -1,13 +1,15 @@
 import { IQuestCondition } from "@spt/models/eft/common/tables/IQuest";
 import { ITemplateItem } from "@spt/models/eft/common/tables/ITemplateItem";
-import config from "../../config/config.json"
+import config from "../../config/config.json";
+import { createHash } from "crypto";
 
 export const saveToFile = (data, filePath) => {
   var fs = require("fs");
   let dir = __dirname;
   let dirArray = dir.split("\\");
-  const directory = `${dirArray[dirArray.length - 5]}/${dirArray[dirArray.length - 4]
-    }/${dirArray[dirArray.length - 3]}/${dirArray[dirArray.length - 2]}/`;
+  const directory = `${dirArray[dirArray.length - 5]}/${
+    dirArray[dirArray.length - 4]
+  }/${dirArray[dirArray.length - 3]}/${dirArray[dirArray.length - 2]}/`;
   console.log(directory);
   fs.writeFile(
     directory + filePath,
@@ -18,7 +20,21 @@ export const saveToFile = (data, filePath) => {
   );
 };
 
-export const getNewMongoId = (items?: Record<string, ITemplateItem>) => {
+export const generateMongoIdFromSeed = (seed: string): string => {
+  if (!seed) {
+    throw new Error("Seed is required to generate a MongoID.");
+  }
+
+  // Create a hash from the seed
+  const hash = createHash("md5").update(seed).digest("hex");
+
+  // MongoDB mongoID is 24 characters long, so truncate or pad with zeros
+  const mongoID = hash.slice(0, 24).padEnd(24, "0");
+
+  return mongoID;
+};
+
+export const getNewMongoId = () => {
   const newId =
     ((new Date().getTime() / 1000) | 0).toString(16) +
     "xxxxxxxxxxxxxxxx"
@@ -27,7 +43,6 @@ export const getNewMongoId = (items?: Record<string, ITemplateItem>) => {
       })
       .toLowerCase();
 
-  if (!!items?.[newId]) return getNewMongoId(items);
   return newId;
 };
 
@@ -79,12 +94,13 @@ const defaultKillQuest = (index: number): IQuestCondition => ({
   visibilityConditions: [],
 });
 
-
 export const cloneDeep = (objectToClone: any) =>
   JSON.parse(JSON.stringify(objectToClone));
 
 export const getKillQuestForGunsmith = (count: number): IQuestCondition => {
-  const totalBots = Math.round(config.baseQuantity + (count * config.countMultiplier))
+  const totalBots = Math.round(
+    config.baseQuantity + count * config.countMultiplier
+  );
 
   const killQuest: IQuestCondition = defaultKillQuest(count);
 
@@ -102,8 +118,6 @@ export const getNumbersFromString = (str: string) => {
       .join("")
   );
 };
-
-
 
 const conditionList = [
   "67a8d5cf026c13afe113d4f2",
@@ -155,8 +169,8 @@ const conditionList = [
   "67a8d5cf0c98b2bd7b762675",
   "67a8d5cfd35d0963908bfbf7",
   "67a8d5cf1eab7c8aa4491487",
-  "67a8d5cf5f4e829f5aa7ab35"
-]
+  "67a8d5cf5f4e829f5aa7ab35",
+];
 
 const counterList = [
   "67a8d5e9650f60d168dc5ad4",
@@ -208,9 +222,8 @@ const counterList = [
   "67a8d5e9476a71f39552c466",
   "67a8d5e934d6ad40f6aa3965",
   "67a8d5e9c442e76c742cc524",
-  "67a8d5e9d8553bff8f0bf15c"
-]
-
+  "67a8d5e9d8553bff8f0bf15c",
+];
 
 const questList = [
   "67a8d60dbf4d2521d81fcaff",
@@ -262,4 +275,5 @@ const questList = [
   "67a8d60dfe0a607fe1afa048",
   "67a8d60d7e237adf50fc43d9",
   "67a8d60de9e23fd8041da0d8",
-  "67a8d60d44222f1475cfbb01"]
+  "67a8d60d44222f1475cfbb01",
+];

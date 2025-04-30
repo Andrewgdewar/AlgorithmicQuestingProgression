@@ -1,4 +1,34 @@
+// Determines which quests unlock fences first quest
+export const fenceStartRequiredQuests = [
+  "The Punisher - Part 6",
+  "Painkiller",
+  "Chemical - Part 4",
+  "Eagle Eye",
+  "Farming - Part 4",
+  "The Key to Success",
+  "Nostalgia",
+];
+
+// TODO: run test to see if the trader unlocks are correct
+// This is a list of quests that unlock traders, if empty, the trader is unlocked by default.
+export const TraderUnlockQuests = {
+  PRAPOR: "",
+  THERAPIST: "",
+  SKIER: "First in Line",
+  PEACEKEEPER: "Background Check",
+  MECHANIC: "Make ULTRA Great Again",
+  RAGMAN: "Debut",
+  JAEGER: "Shootout Picnic",
+  // FENCE: "Acquaintance", // fence is always unlocked, but the his first quest is set via above fenceStartRequiredQuests
+  // LIGHTHOUSEKEEPER: "", // This trader is unlocked by finishing Network Provider - Part 2
+  REF: "Tigr Safari",
+  // BTR: "", // This trader is unlocked by finishing "Shipping Delay - Part 1"
+};
+
+// These are deprecated quests, or problematic
 export const removeList = [
+  "A Healthy Alternative",
+  "Kind of Sabotage",
   "The Stylish One",
   "Important Patient",
   "Bloodhounds",
@@ -48,12 +78,3 @@ export const removeList = [
   "Conservation Area",
   "Contagious Beast",
 ];
-
-export const traderUnlockExample = {
-  availableInGameEditions: [],
-  id: "5d78c49786f7745041358b58", // Needs custom id
-  index: 0,
-  target: "5c0647fdd443bc2504c2d371", // Set the trader ID here
-  type: "TraderUnlock",
-  unknown: false,
-};

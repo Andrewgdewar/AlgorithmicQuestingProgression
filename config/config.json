@@ -10,5 +10,6 @@
   "findItemQuestModifier": 0.1,
   "plantTimeModifier": 0.2,
   "replaceGunsmith": true,
-  "debug": false
+  "debug": false,
+  "questOrderDebug": true
 }
