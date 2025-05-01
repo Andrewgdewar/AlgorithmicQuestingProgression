@@ -17,6 +17,7 @@ export const ReduceReqList = {
   Collector: [2, 15],
   Escort: [2, 2],
   "Beneath The Streets": [2],
+  "Pyramid Scheme": [2, 5],
 };
 
 // TODO: run test to see if the trader unlocks are correct
