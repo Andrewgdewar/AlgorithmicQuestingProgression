@@ -1,23 +1,13 @@
 // Determines which quests unlock fences first quest
-export const fenceStartRequiredQuests = [
-  "Shortage",
-  // "The Punisher - Part 6",
-  // "Painkiller",
-  // "Chemical - Part 4",
-  // "Eagle Eye",
-  // "Farming - Part 4",
-  // "The Key to Success",
-  // "Nostalgia",
-];
+export const fenceStartRequiredQuests = ["The Punisher - Part 6"];
 
-// TODO: run test to see if the trader unlocks are correct
-// This is a list of quests that unlock traders, if empty, the trader is unlocked by default.
-// FENCE: "Acquaintance", // fence is always unlocked, but the his first quest is set via above fenceStartRequiredQuests
-// LIGHTHOUSEKEEPER: "", // This trader is unlocked by finishing Network Provider - Part 2
+// FENCE: fence is always unlocked, but the his first quest is set via above fenceStartRequiredQuests
+// LIGHTHOUSEKEEPER: This trader is unlocked by finishing MECHANIC's Network Provider series (9 quests)
 // BTR: "", // This trader is unlocked by finishing "Shipping Delay - Part 1"
 
 // These are deprecated quests, or problematic
 export const removeList = [
+  "Make Amends", // Not needed
   "Illegal Logging",
   "Chilly",
   "Enough Drinks for That One",

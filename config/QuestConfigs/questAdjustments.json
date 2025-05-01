@@ -90,6 +90,19 @@
         "65e0a329893b7bf535c6a9fd",
         "63a9b591da7999196148ba63"
       ]
+    },
+    "Key to the Tower": {
+      "id": [
+        "62602b061ed3bb5bcc5bd9ea",
+        "62602b0ea4eb80027c4f2e0e",
+        "62602b17f7308432be1d44ca",
+        "62602b1ec4874104f230c0cb",
+        "62602b26e7578c305945c9c6",
+        "633d8b77f2ab4f3f095029d6"
+      ]
+    },
+    "Secrets of Polikhim": {
+      "id": ["66aa74571e5e199ecd094f1b", "66aa74571e5e199ecd094f1e"]
     }
   },
   "adjustReqsList": {
@@ -137,6 +150,16 @@
       "63a9b52b009ffc6a551631a7": { "value": 1 },
       "63a9b557da7999196148ba61": { "value": 1 },
       "63a9b5b2813bba58a50c9eeb": { "value": 1 }
+    },
+    "Assessment - Part 1": {
+      "625ed292c4874104f230c0c8": { "value": 10 }
+    },
+    "Assessment - Part 3": {
+      "6260295faa168e51321d69d9": { "value": 5 },
+      "62602aaff7308432be1d44c9": { "value": 1 },
+      "62602a37c4874104f230c0ca": { "value": 1 },
+      "62602a44e7578c305945c9c5": { "value": 1 },
+      "fa875a2b80abb1c4c9a489fb": { "value": 1 }
     }
   }
 }
