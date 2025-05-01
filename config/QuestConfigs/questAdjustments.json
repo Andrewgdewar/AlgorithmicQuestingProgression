@@ -1,0 +1,142 @@
+{
+  "TraderQuestProgressionQuantity": {
+    "PRAPOR": 2,
+    "THERAPIST": 2,
+    "SKIER": 2,
+    "PEACEKEEPER": 2,
+    "MECHANIC": 2,
+    "RAGMAN": 2,
+    "JAEGER": 2,
+    "FENCE": 1,
+    "LIGHTHOUSEKEEPER": 1,
+    "REF": 1,
+    "BTR": 1
+  },
+  "TraderUnlockQuests": {
+    "PRAPOR": "",
+    "THERAPIST": "",
+    "SKIER": "Shortage",
+    "PEACEKEEPER": "Background Check",
+    "MECHANIC": "Make ULTRA Great Again",
+    "RAGMAN": "Debut",
+    "JAEGER": "Shootout Picnic",
+    "REF": "Tigr Safari"
+  },
+  "deleteReqList": {
+    "Is This a Reference": {
+      "id": [
+        "66d9cbb67b491f9d5304f6e9",
+        "66d9cbb67b491f9d5304f6ea",
+        "66dacf2a88c7001436a67390",
+        "66dad1d941756590432b0eaa",
+        "66dad1ddec53b0df3b10a1b9",
+        "66dad1e0703b718902451ee4",
+        "66dad1e607181e2f78a3a0a2",
+        "66dad1ebc5c8e6cd26dd1d31",
+        "66dad1f00e049ac7abb6d801",
+        "66db1f8d7539f4b4eb640aff",
+        "66db1f928d59a9fe511dfc25",
+        "66db1ff798d52a5a8e4ed1f8",
+        "66debf2e1e254957b82711ff"
+      ]
+    },
+    "Small Business - Part 1": {
+      "id": [
+        "666729738d4b7a9182ad4a89",
+        "66672a1a928cfea6db3ff6cb",
+        "66672b010cf940754acb3a83",
+        "66672b18eba38faad31d29c3",
+        "66672b7dd70d15a60bb41e04",
+        "66672b88a8236f9caf29c39e",
+        "666730b475bbbbfd5049b7da",
+        "666730d6386cf75012a431f2"
+      ]
+    },
+    "Collector": {
+      "index": [
+        1, 3, 4, 5, 7, 9, 10, 11, 12, 14, 15, 19, 23, 24, 25, 26, 27, 28, 29,
+        30, 31, 33, 39, 41, 47, 50, 51, 52, 53, 54, 55, 57
+      ]
+    },
+    "Escort": {
+      "index": [0, 1, 3, 5, 6]
+    },
+    "Beneath The Streets": {
+      "id": [
+        "66aba85403e0ee3101042878",
+        "66aba85403e0ee310104287a",
+        "66aba97b1000025218c82ea8"
+      ]
+    },
+    "Pyramid Scheme": {
+      "index": [0, 1, 3, 5, 6, 8, 12, 14, 15]
+    },
+    "Samples": {
+      "id": [
+        "5edac0e02ddc9e4c802cd969",
+        "5edac1040880da21347b3845",
+        "5edac13760bdcc7ff355811f",
+        "5edac1530880da21347b3846"
+      ]
+    },
+    "Foresters Duty": {
+      "id": ["66ab9da7eb102b9bcd08591d", "66ab9da7eb102b9bcd08591f"]
+    },
+    "Slaughterhouse": {
+      "id": [
+        "63a9b41dad5cc12f22162022",
+        "63a9b45bda7999196148ba5f",
+        "63a9b5f064b9631d9178276b",
+        "65e0a329893b7bf535c6a9fd",
+        "63a9b591da7999196148ba63"
+      ]
+    }
+  },
+  "adjustReqsList": {
+    "Shortage": {
+      "59689eb886f7740d137ebfc3": { "value": 2 },
+      "5968edc086f77420d2328014": { "value": 2 }
+    },
+    "General Wares": {
+      "596a1f0486f77456630ea4d2": { "value": 5 },
+      "596a1f1586f77420d2328077": { "value": 5 }
+    },
+    "Connections Up North": {
+      "676418a60b9bcbe280972288": { "value": 15 }
+    },
+    "Insomnia": {
+      "5c1242fa86f7742aa04fed52": { "value": 10 }
+    },
+    "The Cleaner": {
+      "60e745d6479eef59b01b0bdc": { "value": 20 }
+    },
+    "Long Line": {
+      "60e73ee8b567ff641b129570": { "value": 10 }
+    },
+    "Dandies": {
+      "65734c186dc1e402c80dc1a2": { "value": 10 }
+    },
+    "Booze": {
+      "60e73333465ea8368012cc5b": { "value": 1 },
+      "60e733590367e10a450f7805": { "value": 1 },
+      "60f028268b669d08a35bfad8": { "value": 1 },
+      "62a700fb7230237f257cac2e": { "value": 2 },
+      "60e73397479eef59b01b0bd5": { "value": 1 },
+      "60e733b80367e10a450f7807": { "value": 1 },
+      "60f0284e8b669d08a35bfada": { "value": 1 },
+      "62a70110eb3cb46d9a0bba78": { "value": 2 }
+    },
+    "Foresters Duty": {
+      "66ab9da7eb102b9bcd085922": { "oneSessionOnly": false }
+    },
+    "Hunter": {
+      "600303250b79c6604058ce30": { "value": 5 }
+    },
+    "Slaughterhouse": {
+      "63a9b3d7813bba58a50c9ee9": { "value": 1 },
+      "63a9b52b009ffc6a551631a7": { "value": 1 },
+      "63a9b557da7999196148ba61": { "value": 1 },
+      "63a9b5b2813bba58a50c9eeb": { "value": 1 }
+    }
+  }
+}

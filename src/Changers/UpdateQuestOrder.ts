@@ -1,16 +1,16 @@
 import { DependencyContainer } from "tsyringe";
 import config from "../../config/config.json";
+import {
+  deleteReqList,
+  adjustReqsList,
+  TraderUnlockQuests,
+  TraderQuestProgressionQuantity,
+} from "../../config/QuestConfigs/questAdjustments.json";
 import { DatabaseServer } from "@spt/servers/DatabaseServer";
 import { IQuestConfig } from "@spt/models/spt/config/IQuestConfig";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { Traders } from "@spt/models/enums/Traders";
-import {
-  fenceStartRequiredQuests,
-  ReduceReqList,
-  removeList,
-  TraderQuestProgressionQuantity,
-  TraderUnlockQuests,
-} from "./Constants";
+import { fenceStartRequiredQuests, removeList } from "./Constants";
 import {
   AvailableForStartLevelRequirement,
   AvailableForStartQuestRequirement,
@@ -92,7 +92,8 @@ export default function UpdateQuestOrder(
   );
 
   const usedQuestIdsSet = new Set(usedQuestIds);
-  const reduceReqList = new Set(Object.keys(ReduceReqList));
+  const deleteReqsSet = new Set(Object.keys(deleteReqList));
+  const adjustReqsSet = new Set(Object.keys(adjustReqsList));
 
   Object.keys(quests).forEach((questId) => {
     const quest = quests[questId];
@@ -104,26 +105,6 @@ export default function UpdateQuestOrder(
     } else {
       // Zero out available for start
       quest.conditions.AvailableForStart = [];
-
-      // Sets all quests to be completed by 1 rouble
-      // quest.conditions.AvailableForFinish = [
-      //   {
-      //     conditionType: "HandoverItem",
-      //     dogtagLevel: 0,
-      //     dynamicLocale: false,
-      //     globalQuestCounterId: "",
-      //     id: generateMongoIdFromSeed(questId + "money"),
-      //     index: 0,
-      //     isEncoded: false,
-      //     maxDurability: 100,
-      //     minDurability: 0,
-      //     onlyFoundInRaid: false,
-      //     parentId: "",
-      //     target: ["5449016a4bdc2d6f028b456f"],
-      //     value: 1,
-      //     visibilityConditions: [],
-      //   },
-      // ];
 
       // filter out cross-quest finish conditions
       quest.conditions.AvailableForFinish =
@@ -143,9 +124,9 @@ export default function UpdateQuestOrder(
       });
 
       // Check if questname is in the remove list for AvailableForFinish
-      if (reduceReqList.has(quest.QuestName)) {
-        const divider = ReduceReqList[quest.QuestName][0];
-        const max = ReduceReqList[quest.QuestName][1];
+      if (deleteReqsSet.has(quest.QuestName)) {
+        const key = Object.keys(deleteReqList[quest.QuestName])[0];
+        const values = new Set(deleteReqList[quest.QuestName][key]);
         console.log(
           "\nBefore",
           quest.QuestName,
@@ -153,16 +134,21 @@ export default function UpdateQuestOrder(
         );
         quest.conditions.AvailableForFinish =
           quest.conditions.AvailableForFinish.filter(
-            (_, index) => index % divider !== 0
+            (req) => !values.has(req[key])
           );
 
-        if (max) {
-          quest.conditions.AvailableForFinish =
-            quest.conditions.AvailableForFinish.filter(
-              (_, index) => index < max
-            );
-        }
         console.log("after", quest.conditions.AvailableForFinish.length);
+      }
+
+      if (adjustReqsSet.has(quest.QuestName)) {
+        quest.conditions.AvailableForFinish.forEach(({ id }, index) => {
+          if (adjustReqsList[quest.QuestName][id]) {
+            quest.conditions.AvailableForFinish[index] = {
+              ...quest.conditions.AvailableForFinish[index],
+              ...adjustReqsList[quest.QuestName][id],
+            };
+          }
+        });
       }
     }
   });
