@@ -12,7 +12,7 @@ import { IQuestConfig } from "@spt/models/spt/config/IQuestConfig";
 import { Money } from "@spt/models/enums/Money";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { Traders } from "@spt/models/enums/Traders";
-import { removeList } from "./Constants";
+import { refMoneyMultiplier, removeList } from "./Constants";
 import {
   AvailableForStartLevelRequirement,
   AvailableForStartQuestRequirement,
@@ -257,18 +257,17 @@ export default function UpdateQuestOrder(
 
       if (!quest) return questName;
 
-      let money: Partial<IReward> = { value: 0 },
-        experience: Partial<IReward> = {
+      let experience: Partial<IReward> = {
           availableInGameEditions: [],
           id: generateMongoIdFromSeed(questName + "experience"),
           index: 0,
           type: RewardType.EXPERIENCE,
           unknown: false,
-          value: 1000,
+          value: 1200,
         },
         standing: Partial<IReward> = {
           availableInGameEditions: [],
-          id: generateMongoIdFromSeed(questName + "experience"),
+          id: generateMongoIdFromSeed(questName + "standing"),
           index: 0,
           target: quest.traderId,
           type: RewardType.TRADER_STANDING,
@@ -281,7 +280,7 @@ export default function UpdateQuestOrder(
           case (Object.values(Money) as string[]).includes(
             rew?.items?.[0]?._tpl
           ):
-            money = rew;
+            reward[trader].money.push(rew);
             return false;
           case rew.type === RewardType.EXPERIENCE:
             experience = rew;
@@ -294,8 +293,9 @@ export default function UpdateQuestOrder(
             return true;
         }
       });
+
       reward[trader].experience.push(experience);
-      reward[trader].money.push(money);
+
       reward[trader].standing.push(standing);
     });
 
@@ -309,9 +309,21 @@ export default function UpdateQuestOrder(
       (a, b) => Number(a.value) - Number(b.value)
     );
 
+    // Adjust Refs rewards as he has few quests
     if (trader === "REF") {
-      reward[trader].standing = reward[trader].standing.map((rew) => {
-        rew.value = Number(rew.value) * 2;
+      reward[trader].standing = reward[trader].standing.map(
+        (rew: IReward, index) => {
+          // 1.20 is max this makes for 1.5 with last quest getting level
+          rew.value = (index + 1) / 10;
+          return rew;
+        }
+      );
+
+      reward[trader].money = reward[trader].money.map((rew: IReward, index) => {
+        rew.value = Number(rew.value) + index * refMoneyMultiplier;
+        rew.items[0].upd.StackObjectsCount =
+          Number(rew.items[0].upd.StackObjectsCount) +
+          index * refMoneyMultiplier;
         return rew;
       });
     }
@@ -322,11 +334,11 @@ export default function UpdateQuestOrder(
       if (!questId || !questId) return;
 
       if (reward[trader].experience[index].value)
-        quest.rewards.Success.push(reward[trader].experience[index]);
+        quest.rewards.Success.push(reward[trader]?.experience[index]);
       if (reward[trader].money[index].value)
-        quest.rewards.Success.push(reward[trader].money[index]);
+        quest.rewards.Success.push(reward[trader]?.money[index]);
       if (reward[trader].standing[index].value)
-        quest.rewards.Success.push(reward[trader].standing[index]);
+        quest.rewards.Success.push(reward[trader]?.standing[index]);
     });
   });
 

@@ -1,6 +1,7 @@
 // FENCE: fence is always unlocked, but the his first quest is set via fenceStartRequiredQuests
 // LIGHTHOUSEKEEPER: This trader is unlocked by finishing MECHANIC's Network Provider series (9 quests)
 // BTR: "", // This trader is unlocked by finishing "Shipping Delay - Part 1"
+export const refMoneyMultiplier = 20;
 
 // These are deprecated quests, or problematic
 export const removeList = [
