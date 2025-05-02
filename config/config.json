@@ -1,5 +1,6 @@
 {
   "enable": true,
+  "disableDailies": true,
   "baseQuantity": 4,
   "countMultiplier": 0.5,
   "questLevelUnlockModifier": 1,

@@ -40,6 +40,12 @@ export default function UpdateQuestOrder(
   questconfig.bearOnlyQuests = [];
   questconfig.usecOnlyQuests = [];
 
+  if (config.disableDailies)
+    questconfig.repeatableQuests.forEach((_, index) => {
+      questconfig.repeatableQuests[index].numQuests = 0;
+      questconfig.repeatableQuests[index].traderWhitelist = [];
+    });
+
   const removeListSet = new Set(removeList);
 
   const traderQuestList = [];
@@ -110,6 +116,10 @@ export default function UpdateQuestOrder(
     } else {
       // Zero out available for start
       quest.conditions.AvailableForStart = [];
+
+      // Remove quest failures
+      quest.rewards.Fail = [];
+      quest.restartable = true;
 
       // filter out cross-quest finish conditions
       quest.conditions.AvailableForFinish =
