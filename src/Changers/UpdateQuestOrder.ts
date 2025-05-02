@@ -333,12 +333,12 @@ export default function UpdateQuestOrder(
       const quest = quests[questId];
       if (!questId || !questId) return;
 
-      if (reward[trader].experience[index].value)
-        quest.rewards.Success.push(reward[trader]?.experience[index]);
-      if (reward[trader].money[index].value)
-        quest.rewards.Success.push(reward[trader]?.money[index]);
-      if (reward[trader].standing[index].value)
-        quest.rewards.Success.push(reward[trader]?.standing[index]);
+      if (reward[trader].experience[index]?.value)
+        quest.rewards.Success.push(reward[trader].experience[index]);
+      if (reward[trader].money[index]?.value)
+        quest.rewards.Success.push(reward[trader].money[index]);
+      if (reward[trader].standing[index]?.value)
+        quest.rewards.Success.push(reward[trader].standing[index]);
     });
   });
 
