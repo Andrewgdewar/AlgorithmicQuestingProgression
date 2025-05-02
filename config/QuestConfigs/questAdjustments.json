@@ -103,6 +103,16 @@
     },
     "Secrets of Polikhim": {
       "id": ["66aa74571e5e199ecd094f1b", "66aa74571e5e199ecd094f1e"]
+    },
+    "Trouble in the Big City": {
+      "id": [
+        "63bd64ba3d34b0e64b0d0a17",
+        "639b002fda859817035a344b",
+        "639ae7423174277743234bb7"
+      ]
+    },
+    "Hot Wheels": {
+      "id": ["673f5065cdfe082966842575"]
     }
   },
   "adjustReqsList": {
@@ -160,6 +170,27 @@
       "62602a37c4874104f230c0ca": { "value": 1 },
       "62602a44e7578c305945c9c5": { "value": 1 },
       "fa875a2b80abb1c4c9a489fb": { "value": 1 }
+    },
+    "Trouble in the Big City": {
+      "639aea2228d8a21b593a3491": {
+        "conditionType": "PlaceBeacon",
+        "dynamicLocale": false,
+        "globalQuestCounterId": "",
+        "id": "639aea2228d8a21b593a3491",
+        "index": 2,
+        "parentId": "",
+        "plantTime": 10,
+        "target": ["5991b51486f77447b112d44f"],
+        "value": 1,
+        "visibilityConditions": [
+          {
+            "conditionType": "CompleteCondition",
+            "id": "63bd6881629bfa6e640689dc",
+            "target": "63bd64552803ffbfad0e3e48"
+          }
+        ],
+        "zoneId": "quest_zone_keeper10_place"
+      }
     }
   }
 }

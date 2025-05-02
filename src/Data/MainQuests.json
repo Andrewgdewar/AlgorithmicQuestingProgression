@@ -414,15 +414,15 @@
   ],
   "LIGHTHOUSEKEEPER": [
     "Simple Side Job",
-    "Order From Outside",
-    "Trouble in the Big City",
-    "Spotter",
-    "Following the Bread Crumbs",
-    "Provocation",
-    "Payback",
-    "Snatch",
-    "Missing Informant",
     "Information Source",
+    "Order From Outside",
+    "Missing Informant",
+    "Trouble in the Big City",
+    "Payback",
+    "Provocation",
+    "Following the Bread Crumbs",
+    "Spotter",
+    "Snatch",
     "Make an Impression"
   ],
   "REF": [
@@ -433,16 +433,16 @@
     "Create a Distraction - Part 2"
   ],
   "BTR": [
+    "Swift Retribution",
+    "Building Foundations",
+    "Protect the Sky",
+    "Discombobulate",
     "Ask for Directions",
-    "Battery Change",
     "Hot Wheels",
     "Hot Wheels - Lets Try Again",
     "Natural Exchange",
-    "Building Foundations",
     "Inevitable Response",
-    "Protect the Sky",
-    "Discombobulate",
-    "The Price of Independence",
-    "Swift Retribution"
+    "Battery Change",
+    "The Price of Independence"
   ]
 }
