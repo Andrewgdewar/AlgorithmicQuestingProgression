@@ -15,13 +15,14 @@
   "TraderUnlockQuests": {
     "PRAPOR": "",
     "THERAPIST": "",
-    "SKIER": "Shortage",
-    "PEACEKEEPER": "Background Check",
-    "MECHANIC": "Make ULTRA Great Again",
+    "SKIER": "All Is Revealed",
+    "PEACEKEEPER": "Search Mission",
+    "MECHANIC": "Another Shipping Delay",
     "RAGMAN": "Debut",
-    "JAEGER": "Shootout Picnic",
+    "JAEGER": "Airmail",
     "REF": "Tigr Safari"
   },
+  "FenceStartRequiredQuests": ["The Punisher - Part 6"],
   "deleteReqList": {
     "Is This a Reference": {
       "id": [

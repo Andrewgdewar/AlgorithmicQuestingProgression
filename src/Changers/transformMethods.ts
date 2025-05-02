@@ -71,21 +71,5 @@ export const IterateOverArrayAddingQuestReqs = (
         console.warn("Quest not found: ", questId);
       }
     });
-
-    // console.log("adding ", prevSets, " to ", currentSet);
   }
-  // console.log(sets);
-  // prevQuestIds = currentIdsToAdd;
-
-  // const prevQuestId = questIdList[index];
-  // const nextQuestId = questIdList[index + 1];
-  // const quest = quests[nextQuestId];
-  // if (quest) {
-  //   quest.conditions.AvailableForStart.push(
-  //     AvailableForStartQuestRequirement(
-  //       prevQuestId,
-  //       prevQuestId + "prevQuest"
-  //     )
-  //   );
-  // }
 };

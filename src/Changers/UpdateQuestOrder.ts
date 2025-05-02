@@ -5,22 +5,25 @@ import {
   adjustReqsList,
   TraderUnlockQuests,
   TraderQuestProgressionQuantity,
+  FenceStartRequiredQuests,
 } from "../../config/QuestConfigs/questAdjustments.json";
 import { DatabaseServer } from "@spt/servers/DatabaseServer";
 import { IQuestConfig } from "@spt/models/spt/config/IQuestConfig";
+import { Money } from "@spt/models/enums/Money";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { Traders } from "@spt/models/enums/Traders";
-import { fenceStartRequiredQuests, removeList } from "./Constants";
+import { removeList } from "./Constants";
 import {
   AvailableForStartLevelRequirement,
   AvailableForStartQuestRequirement,
   IterateOverArrayAddingQuestReqs,
   traderUnlockSuccessByID,
 } from "./transformMethods";
-import MainQuests from "../Data/MainQuests.json";
+import MainQuests from "../../config/QuestConfigs/MainQuests.json";
 import { generateMongoIdFromSeed, saveToFile } from "../Utils/utils";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
-import { IConfig } from "@spt/models/eft/common/IGlobals";
+import { RewardType } from "@spt/models/enums/RewardType";
+import { IReward } from "@spt/models/eft/common/tables/IReward";
 
 export default function UpdateQuestOrder(
   container: DependencyContainer
@@ -31,7 +34,6 @@ export default function UpdateQuestOrder(
   const items = tables.templates.items;
   const quests = tables.templates.quests;
   const traders = tables.traders;
-  const traderQuestList = [];
 
   const questconfig = configServer.getConfig<IQuestConfig>(ConfigTypes.QUEST);
 
@@ -40,8 +42,11 @@ export default function UpdateQuestOrder(
 
   const removeListSet = new Set(removeList);
 
+  const traderQuestList = [];
+  const flattenedTraderList = {};
   // Check and remove quests from the trader quest list if they are in the remove list
   Object.keys(MainQuests).forEach((trader) => {
+    flattenedTraderList[trader] = [];
     MainQuests[trader].forEach((questName) => {
       if (typeof questName === "object") {
         questName.forEach((questNameInArray) => {
@@ -49,6 +54,7 @@ export default function UpdateQuestOrder(
             console.log(`!!! Removing ${questNameInArray} from ${trader} !!!`);
             delete quests[questNameInArray];
           } else {
+            flattenedTraderList[trader].push(questNameInArray);
             traderQuestList.push(questNameInArray);
           }
         });
@@ -57,6 +63,7 @@ export default function UpdateQuestOrder(
           console.log(`!!! Removing ${questName} from ${trader} !!!`);
           delete quests[questName];
         } else {
+          flattenedTraderList[trader].push(questName);
           traderQuestList.push(questName);
         }
       }
@@ -64,9 +71,7 @@ export default function UpdateQuestOrder(
   });
 
   //Create a set of quests that are usable
-  const usableQuestList = new Set(traderQuestList);
 
-  // saveToFile(traderQuestList, "./traderQuestList.json");
   // Create a reverse mapping of traders to their names
   const traderMapper = {};
   Object.keys(Traders).forEach((name) => {
@@ -127,17 +132,17 @@ export default function UpdateQuestOrder(
       if (deleteReqsSet.has(quest.QuestName)) {
         const key = Object.keys(deleteReqList[quest.QuestName])[0];
         const values = new Set(deleteReqList[quest.QuestName][key]);
-        console.log(
-          "\nBefore",
-          quest.QuestName,
-          quest.conditions.AvailableForFinish.length
-        );
+        // console.log(
+        //   "\nBefore",
+        //   quest.QuestName,
+        //   quest.conditions.AvailableForFinish.length
+        // );
         quest.conditions.AvailableForFinish =
           quest.conditions.AvailableForFinish.filter(
             (req) => !values.has(req[key])
           );
 
-        console.log("after", quest.conditions.AvailableForFinish.length);
+        // console.log("after", quest.conditions.AvailableForFinish.length);
       }
 
       if (adjustReqsSet.has(quest.QuestName)) {
@@ -198,7 +203,7 @@ export default function UpdateQuestOrder(
     console.log("\nQuests required for fence/kappa unlock: ");
 
   // Add required quests for unlocking fence
-  fenceStartRequiredQuests.forEach((questName) => {
+  FenceStartRequiredQuests.forEach((questName) => {
     config.questOrderDebug && console.log(questName);
     const questId = questMapper[questName];
     if (!questId) {
@@ -242,7 +247,93 @@ export default function UpdateQuestOrder(
     });
   });
 
-  saveToFile(quests, "./quests.json");
+  const reward = {};
+  Object.keys(MainQuests).forEach((trader) => {
+    reward[trader] = { experience: [], money: [], standing: [] };
+
+    flattenedTraderList[trader].forEach((questName) => {
+      const questId = questMapper[questName];
+      const quest = quests[questId];
+
+      if (!quest) return questName;
+
+      let money: Partial<IReward> = { value: 0 },
+        experience: Partial<IReward> = {
+          availableInGameEditions: [],
+          id: generateMongoIdFromSeed(questName + "experience"),
+          index: 0,
+          type: RewardType.EXPERIENCE,
+          unknown: false,
+          value: 1000,
+        },
+        standing: Partial<IReward> = {
+          availableInGameEditions: [],
+          id: generateMongoIdFromSeed(questName + "experience"),
+          index: 0,
+          target: quest.traderId,
+          type: RewardType.TRADER_STANDING,
+          unknown: false,
+          value: 0.01,
+        };
+
+      quest.rewards.Success = quest.rewards.Success.filter((rew) => {
+        switch (true) {
+          case (Object.values(Money) as string[]).includes(
+            rew?.items?.[0]?._tpl
+          ):
+            money = rew;
+            return false;
+          case rew.type === RewardType.EXPERIENCE:
+            experience = rew;
+            return false;
+          case rew.type === RewardType.TRADER_STANDING &&
+            quest.traderId === rew.target:
+            standing = rew;
+            return false;
+          default:
+            return true;
+        }
+      });
+      reward[trader].experience.push(experience);
+      reward[trader].money.push(money);
+      reward[trader].standing.push(standing);
+    });
+
+    reward[trader].experience = reward[trader].experience.sort(
+      (a, b) => Number(a.value) - Number(b.value)
+    );
+    reward[trader].money = reward[trader].money.sort(
+      (a, b) => Number(a.value) - Number(b.value)
+    );
+    reward[trader].standing = reward[trader].standing.sort(
+      (a, b) => Number(a.value) - Number(b.value)
+    );
+
+    if (trader === "REF") {
+      reward[trader].standing = reward[trader].standing.map((rew) => {
+        rew.value = Number(rew.value) * 2;
+        return rew;
+      });
+    }
+
+    flattenedTraderList[trader].forEach((questName, index) => {
+      const questId = questMapper[questName];
+      const quest = quests[questId];
+      if (!questId || !questId) return;
+
+      if (reward[trader].experience[index].value)
+        quest.rewards.Success.push(reward[trader].experience[index]);
+      if (reward[trader].money[index].value)
+        quest.rewards.Success.push(reward[trader].money[index]);
+      if (reward[trader].standing[index].value)
+        quest.rewards.Success.push(reward[trader].standing[index]);
+    });
+  });
+
+  // saveToFile(traderQuestList, "refDBS/traderQuestList.json");
+  // saveToFile(reward, "refDBS/reward.json");
+  // saveToFile(flattenedTraderList, "refDBS/flattenedTraderList.json");
+  // saveToFile(quests, "refDBS/quests.json");
 
   console.log("\n[QuestingReimagined] Changes Complete");
 }

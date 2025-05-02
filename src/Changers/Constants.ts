@@ -1,7 +1,4 @@
-// Determines which quests unlock fences first quest
-export const fenceStartRequiredQuests = ["The Punisher - Part 6"];
-
-// FENCE: fence is always unlocked, but the his first quest is set via above fenceStartRequiredQuests
+// FENCE: fence is always unlocked, but the his first quest is set via fenceStartRequiredQuests
 // LIGHTHOUSEKEEPER: This trader is unlocked by finishing MECHANIC's Network Provider series (9 quests)
 // BTR: "", // This trader is unlocked by finishing "Shipping Delay - Part 1"
 
