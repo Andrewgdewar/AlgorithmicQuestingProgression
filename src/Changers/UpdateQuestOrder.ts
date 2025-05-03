@@ -6,21 +6,26 @@ import {
   TraderUnlockQuests,
   TraderQuestProgressionQuantity,
   FenceStartRequiredQuests,
+  refMoneyMultiplier,
 } from "../../config/QuestConfigs/questAdjustments.json";
 import { DatabaseServer } from "@spt/servers/DatabaseServer";
 import { IQuestConfig } from "@spt/models/spt/config/IQuestConfig";
 import { Money } from "@spt/models/enums/Money";
 import { ConfigServer } from "@spt/servers/ConfigServer";
 import { Traders } from "@spt/models/enums/Traders";
-import { refMoneyMultiplier, removeList } from "./Constants";
+import { removeList } from "./Constants";
 import {
+  assignQuestNamesWithWeight,
   AvailableForStartLevelRequirement,
   AvailableForStartQuestRequirement,
+  convertMoney,
   IterateOverArrayAddingQuestReqs,
+  MoneyIDConverter,
+  TraderCurrencies,
   traderUnlockSuccessByID,
 } from "./transformMethods";
 import MainQuests from "../../config/QuestConfigs/MainQuests.json";
-import { generateMongoIdFromSeed, saveToFile } from "../Utils/utils";
+import { cloneDeep, generateMongoIdFromSeed, saveToFile } from "../Utils/utils";
 import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { RewardType } from "@spt/models/enums/RewardType";
 import { IReward } from "@spt/models/eft/common/tables/IReward";
@@ -40,11 +45,12 @@ export default function UpdateQuestOrder(
   questconfig.bearOnlyQuests = [];
   questconfig.usecOnlyQuests = [];
 
-  if (config.disableDailies)
+  if (config.disableDailies) {
     questconfig.repeatableQuests.forEach((_, index) => {
       questconfig.repeatableQuests[index].numQuests = 0;
       questconfig.repeatableQuests[index].traderWhitelist = [];
     });
+  }
 
   const removeListSet = new Set(removeList);
 
@@ -86,10 +92,18 @@ export default function UpdateQuestOrder(
 
   // Create a mapping of the questnames to their IDs
   const questMapper = {};
+  // const assortMapper = {};
   const seen = new Set();
   Object.keys(quests)
     .reverse()
     .forEach((questId) => {
+      // const assorts = quests[questId].rewards.Success.filter(
+      //   (req) => req.type === RewardType.ASSORTMENT_UNLOCK
+      // );
+      // if (assorts.length) {
+      //   assortMapper[questId] = assorts;
+      // }
+
       if (seen.has(questId)) {
         return;
       }
@@ -285,11 +299,31 @@ export default function UpdateQuestOrder(
           value: 0.01,
         };
 
+      const traderCurrency = TraderCurrencies[quest.traderId];
       quest.rewards.Success = quest.rewards.Success.filter((rew) => {
         switch (true) {
           case (Object.values(Money) as string[]).includes(
             rew?.items?.[0]?._tpl
           ):
+            const moneyType = rew?.items?.[0]?._tpl as Money;
+            if (moneyType !== traderCurrency) {
+              const newValue = convertMoney(
+                Number(rew.value),
+                moneyType,
+                traderCurrency
+              );
+              // console.log(
+              //   Number(rew.value),
+              //   newValue,
+              //   MoneyIDConverter[moneyType],
+              //   ">",
+              //   MoneyIDConverter[traderCurrency],
+              //   trader,
+              //   questName
+              // );
+              rew.items[0].upd.StackObjectsCount = newValue;
+              rew.value = newValue;
+            }
             reward[trader].money.push(rew);
             return false;
           case rew.type === RewardType.EXPERIENCE:
@@ -298,6 +332,9 @@ export default function UpdateQuestOrder(
           case rew.type === RewardType.TRADER_STANDING &&
             quest.traderId === rew.target:
             standing = rew;
+            return false;
+          case rew.type === RewardType.TRADER_STANDING && Number(rew.value) < 0:
+            // remove negative rep
             return false;
           default:
             return true;
@@ -338,6 +375,7 @@ export default function UpdateQuestOrder(
       });
     }
 
+    // Set the rewards
     flattenedTraderList[trader].forEach((questName, index) => {
       const questId = questMapper[questName];
       const quest = quests[questId];
@@ -350,12 +388,81 @@ export default function UpdateQuestOrder(
       if (reward[trader].standing[index]?.value)
         quest.rewards.Success.push(reward[trader].standing[index]);
     });
+
+    const { assort, questassort } = traders[Traders[trader]];
+    if (questassort?.success) {
+      const assortDataCopy = cloneDeep(questassort.success);
+      Object.keys(assortDataCopy).forEach((key) => {
+        const output = {};
+        const oldQuestId = assortDataCopy[key];
+        output["oldQuestId"] = oldQuestId;
+        output["assort"] = quests[oldQuestId].rewards.Success.find(
+          (req) => req.type === RewardType.ASSORTMENT_UNLOCK
+        );
+
+        // TODO: Add check for custom assort assigntments and return if used.
+
+        if (!output["assort"]) {
+          // console.log("didn't find an assort", quests[oldQuestId].QuestName);
+          return;
+        }
+
+        quests[oldQuestId].rewards.Success = quests[
+          oldQuestId
+        ].rewards.Success.filter((req) => req.id !== output["assort"].id);
+
+        assortDataCopy[key] = output;
+      });
+
+      // // Delete all assort unlocks in quests
+      // Object.values(assortData Copy).forEach(
+      //   ({ oldQuestId: questId, assorts }) => {
+      //     const idSet = new Set(assorts.map(({ id }) => id));
+      //     quests[questId].rewards.Success = quests[
+      //       questId
+      //     ].rewards.Success.filter((req) => !idSet.has(req.id));
+      //   }
+      // );
+
+      const assortData = Object.keys(assortDataCopy)
+        .map((key) => {
+          const tpl = assort.items.find((item) => item._id === key)?._tpl;
+          return {
+            ...assortDataCopy[key],
+            key,
+            name: items[tpl]?._name,
+            tpl,
+            level: assort.loyal_level_items[key],
+          };
+        })
+        .sort((a, b) => a.level - b.level);
+
+      reward[trader]["assortData"] = assignQuestNamesWithWeight(
+        flattenedTraderList[trader],
+        assortData
+      );
+
+      reward[trader]["assortData"].forEach(({ key, QuestName }) => {
+        const questId = questMapper[QuestName];
+        const quest = quests[questId];
+        if (!questId || !quest)
+          return console.log("Problem assigning assort for ", QuestName, key);
+        questassort.success[key] = questId;
+      });
+
+      reward[trader]["assortData"].forEach(({ QuestName, assort }) => {
+        if (assort) {
+          quests[questMapper[QuestName]].rewards.Success.push(assort);
+        }
+      });
+    }
   });
 
+  saveToFile(traders[Traders.THERAPIST].questassort, "refDBS/questassort.json");
   // saveToFile(traderQuestList, "refDBS/traderQuestList.json");
-  // saveToFile(reward, "refDBS/reward.json");
+  saveToFile(reward, "refDBS/reward.json");
   // saveToFile(flattenedTraderList, "refDBS/flattenedTraderList.json");
-  // saveToFile(quests, "refDBS/quests.json");
+  saveToFile(quests, "refDBS/quests.json");
 
   console.log("\n[QuestingReimagined] Changes Complete");
 }

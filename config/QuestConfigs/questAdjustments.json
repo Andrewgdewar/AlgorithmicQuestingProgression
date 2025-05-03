@@ -193,5 +193,7 @@
         "zoneId": "quest_zone_keeper10_place"
       }
     }
-  }
+  },
+  "unlockAssortWeightFactorZeroToOne": 0.7,
+  "refMoneyMultiplier": 20
 }

@@ -10,7 +10,6 @@ export const saveToFile = (data, filePath) => {
   const directory = `${dirArray[dirArray.length - 5]}/${
     dirArray[dirArray.length - 4]
   }/${dirArray[dirArray.length - 3]}/${dirArray[dirArray.length - 2]}/`;
-  console.log(directory);
   fs.writeFile(
     directory + filePath,
     JSON.stringify(data, null, 4),

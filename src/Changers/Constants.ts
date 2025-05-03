@@ -2,12 +2,6 @@
 // LIGHTHOUSEKEEPER: This trader is unlocked by finishing MECHANIC's Network Provider series (9 quests)
 // BTR: "", // This trader is unlocked by finishing "Shipping Delay - Part 1"
 
-
-// Remove negative rep
-
-// look at balancing all of the unlocks.
-export const refMoneyMultiplier = 20;
-
 // These are deprecated quests, or problematic
 export const removeList = [
   "Make Amends", // Not needed
