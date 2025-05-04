@@ -98,7 +98,7 @@ export const cloneDeep = (objectToClone: any) =>
 
 export const getKillQuestForGunsmith = (count: number): IQuestCondition => {
   const totalBots = Math.round(
-    config.baseQuantity + count * config.countMultiplier
+    config.baseKillCountQuantity + count * config.killCountModifier
   );
 
   const killQuest: IQuestCondition = defaultKillQuest(count);
