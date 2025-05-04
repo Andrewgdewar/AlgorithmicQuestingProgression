@@ -165,17 +165,17 @@ export default function OverHaulModule(
       if (deleteReqsSet.has(quest.QuestName)) {
         const key = Object.keys(deleteReqList[quest.QuestName])[0];
         const values = new Set(deleteReqList[quest.QuestName][key]);
-        console.log(
-          "\nBefore",
-          quest.QuestName,
-          quest.conditions.AvailableForFinish.length
-        );
+        // console.log(
+        //   "\nBefore",
+        //   quest.QuestName,
+        //   quest.conditions.AvailableForFinish.length
+        // );
         quest.conditions.AvailableForFinish =
           quest.conditions.AvailableForFinish.filter(
             (req) => !values.has(req[key])
           );
 
-        console.log("after", quest.conditions.AvailableForFinish.length);
+        // console.log("after", quest.conditions.AvailableForFinish.length);
       }
 
       if (adjustReqsSet.has(quest.QuestName)) {
@@ -535,6 +535,4 @@ export default function OverHaulModule(
   // saveToFile(reward, "refDBS/reward.json");
   // saveToFile(flattenedTraderList, "refDBS/flattenedTraderList.json");
   // saveToFile(quests, "refDBS/quests.json");
-
-  console.log("\n[QuestingReimagined] Changes Complete");
 }

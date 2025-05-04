@@ -3,11 +3,9 @@ import config from "../../config/config.json";
 import localeConfig from "../../config/localeConfig.json";
 import { DatabaseServer } from "@spt/servers/DatabaseServer";
 import {
-  cloneDeep,
   generateMongoIdFromSeed,
   getKillQuestForGunsmith,
-  getNewMongoId,
-  getNumbersFromString,
+  getNumbersFromName,
   saveToFile,
 } from "../Utils/utils";
 import { IQuest } from "@spt/models/eft/common/tables/IQuest";
@@ -98,7 +96,7 @@ export default function AdjusterModule(
       const languageList = Object.keys(languages);
       currentQuest.type = QuestTypeEnum.ELIMINATION;
 
-      const currentQuestNumber = getNumbersFromString(currentQuest.QuestName);
+      const currentQuestNumber = getNumbersFromName(currentQuest.QuestName);
 
       const killQuest = getKillQuestForGunsmith(currentQuestNumber);
 
@@ -232,6 +230,5 @@ export default function AdjusterModule(
       });
     }
   }); //67a8d5cf7aa8a5f2769bf66f
-
-  config.adjusterDebug && console.log("QuestDifficultyTweaker - Changes Complete");
+  // saveToFile(quests, "refDBS/quests.json");
 }

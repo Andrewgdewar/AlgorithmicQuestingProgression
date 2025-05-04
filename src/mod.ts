@@ -22,6 +22,8 @@ class QuestingReimagined implements IPostSptLoadMod {
       } catch (error) {
         console.error(error);
       }
+
+      console.log("[QuestingReimagined] Changes Complete");
     }
   }
 }
