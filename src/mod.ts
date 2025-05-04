@@ -10,12 +10,12 @@ import {
 import OverHaulModule from "./Changers/OverHaulModule";
 import AdjusterModule from "./Changers/AdjusterModule";
 
-class QuestingReimagined implements IPostSptLoadMod {
+class AlgorithmicQuestingProgression implements IPostSptLoadMod {
   postSptLoad(container: DependencyContainer): void {
     if (enableOverhaulModule || enableAdjusterModule) {
       try {
         if (overHaulDebug || adjusterDebug)
-          console.log("\n[QuestingReimagined] Starting up");
+          console.log("\n[AlgorithmicQuestingProgression] Starting up");
 
         if (enableOverhaulModule) OverHaulModule(container);
         if (enableAdjusterModule) AdjusterModule(container);
@@ -23,9 +23,9 @@ class QuestingReimagined implements IPostSptLoadMod {
         console.error(error);
       }
 
-      console.log("[QuestingReimagined] Changes Complete");
+      console.log("[AlgorithmicQuestingProgression] Changes Complete");
     }
   }
 }
 
-module.exports = { mod: new QuestingReimagined() };
+module.exports = { mod: new AlgorithmicQuestingProgression() };
