@@ -157,6 +157,7 @@ export function convertMoney(
   ) {
     throw new Error("Invalid currency provided.");
   }
+
   if (fromCurrency === toCurrency) {
     return amount;
   }

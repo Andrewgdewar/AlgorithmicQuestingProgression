@@ -7,7 +7,9 @@ import {
   TraderQuestProgressionQuantity,
   FenceStartRequiredQuests,
   refMoneyMultiplier,
+  manualAssortReassignment,
 } from "../../config/QuestConfigs/questAdjustments.json";
+import ammoLevelUnlocks from "../../config/QuestConfigs/ammoLevelUnlocks.json";
 import { DatabaseServer } from "@spt/servers/DatabaseServer";
 import { IQuestConfig } from "@spt/models/spt/config/IQuestConfig";
 import { Money } from "@spt/models/enums/Money";
@@ -51,6 +53,13 @@ export default function UpdateQuestOrder(
       questconfig.repeatableQuests[index].traderWhitelist = [];
     });
   }
+
+  const usedAssortQuestnames = new Set(
+    manualAssortReassignment.map(({ QuestName }) => QuestName)
+  );
+  const usedAssortKeys = new Set(
+    manualAssortReassignment.map(({ key }) => key)
+  );
 
   const removeListSet = new Set(removeList);
 
@@ -312,6 +321,7 @@ export default function UpdateQuestOrder(
                 moneyType,
                 traderCurrency
               );
+
               // console.log(
               //   Number(rew.value),
               //   newValue,
@@ -322,6 +332,7 @@ export default function UpdateQuestOrder(
               //   questName
               // );
               rew.items[0].upd.StackObjectsCount = newValue;
+              rew.items[0]._tpl = traderCurrency;
               rew.value = newValue;
             }
             reward[trader].money.push(rew);
@@ -400,8 +411,6 @@ export default function UpdateQuestOrder(
           (req) => req.type === RewardType.ASSORTMENT_UNLOCK
         );
 
-        // TODO: Add check for custom assort assigntments and return if used.
-
         if (!output["assort"]) {
           // console.log("didn't find an assort", quests[oldQuestId].QuestName);
           return;
@@ -414,34 +423,64 @@ export default function UpdateQuestOrder(
         assortDataCopy[key] = output;
       });
 
-      // // Delete all assort unlocks in quests
-      // Object.values(assortData Copy).forEach(
-      //   ({ oldQuestId: questId, assorts }) => {
-      //     const idSet = new Set(assorts.map(({ id }) => id));
-      //     quests[questId].rewards.Success = quests[
-      //       questId
-      //     ].rewards.Success.filter((req) => !idSet.has(req.id));
-      //   }
-      // );
-
-      const assortData = Object.keys(assortDataCopy)
+      let assortData = Object.keys(assortDataCopy)
         .map((key) => {
           const tpl = assort.items.find((item) => item._id === key)?._tpl;
-          return {
+
+          // AMMO LEVEL ADJUSTMENT
+          if (items[tpl]?._props?.Caliber) {
+            const calibre = items[tpl]._props.Caliber;
+            if (ammoLevelUnlocks[calibre]) {
+              const { level, name } = ammoLevelUnlocks[calibre].find(
+                ({ tpl: aTpl }) => aTpl === tpl
+              );
+              if (assort.loyal_level_items[key] !== level) {
+                //   console.log(
+                //     "reassigning",
+                //     name,
+                //     "from",
+                //     assort.loyal_level_items[key],
+                //     "to",
+                //     level
+                //   );
+                assort.loyal_level_items[key] = level;
+              }
+            }
+          }
+
+          const output = {
             ...assortDataCopy[key],
             key,
             name: items[tpl]?._name,
             tpl,
             level: assort.loyal_level_items[key],
           };
+          return output;
         })
-        .sort((a, b) => a.level - b.level);
+        .sort((a, b) => Number(a.level) - Number(b.level));
+
+      const manualDataToAdd = assortData
+        .filter((data) => usedAssortKeys.has(data.key))
+        .map((data) => {
+          const { QuestName, level } = manualAssortReassignment.find(
+            (item) => item.key === data.key
+          );
+          data["QuestName"] = QuestName;
+          data.level = level;
+          return data;
+        });
 
       reward[trader]["assortData"] = assignQuestNamesWithWeight(
-        flattenedTraderList[trader],
-        assortData
+        flattenedTraderList[trader].filter(
+          (name: string) => !usedAssortQuestnames.has(name)
+        ), // Remove already assigned assorted quests
+        assortData.filter(({ key }) => !usedAssortKeys.has(key))
       );
 
+      // Add all of the manual assort items to reward[trader]["assortData"]
+      reward[trader]["assortData"].push(...manualDataToAdd);
+
+      // This reassigns all the assorts for all quests.
       reward[trader]["assortData"].forEach(({ key, QuestName }) => {
         const questId = questMapper[QuestName];
         const quest = quests[questId];
@@ -458,7 +497,40 @@ export default function UpdateQuestOrder(
     }
   });
 
-  saveToFile(traders[Traders.THERAPIST].questassort, "refDBS/questassort.json");
+  Object.keys(reward).forEach((trader) => {
+    reward[trader] = reward[trader].assortData?.map(
+      ({ key, name, tpl, level, QuestName }) => ({
+        key,
+        name,
+        tpl,
+        level,
+        QuestName,
+        Cost: items[
+          traders[Traders[trader]].assort.barter_scheme[key][0][0]._tpl
+        ]._name,
+      })
+    );
+  });
+
+  // Object.keys(ammo).forEach((calibre) => {
+  //   ammo[calibre] = ammo[calibre].map(
+  //     ({ key, name, tpl, level, QuestName, assort }) => ({
+  //       key,
+  //       name,
+  //       tpl,
+  //       level,
+  //       damage: items[tpl]._props.Damage,
+  //       pen: items[tpl]._props.PenetrationPower,
+  //       QuestName,
+  //       trader: traderMapper[assort.traderId],
+  //     })
+  //   );
+  // });
+
+  saveToFile(
+    traders[Traders.PRAPOR].assort.loyal_level_items,
+    "refDBS/loyal_level_items.json"
+  );
   // saveToFile(traderQuestList, "refDBS/traderQuestList.json");
   saveToFile(reward, "refDBS/reward.json");
   // saveToFile(flattenedTraderList, "refDBS/flattenedTraderList.json");
