@@ -1,5 +1,6 @@
 {
-  "enable": true,
+  "enableOverhaulModule": true,
+  "enableAdjusterModule": true,
   "disableDailies": true,
   "baseKillCountQuantity": 4,
   "killCountModifier": 0.5,
@@ -7,10 +8,10 @@
   "questExperienceModifier": 1,
   "traderStandingRewardModifier": 1,
   "itemRewardModifier": 1,
-  "killQuestCountModifier": 0.8,
+  "killQuestCountModifier": 1,
   "findItemQuestModifier": 0.5,
   "plantTimeModifier": 0.2,
   "replaceGunsmith": true,
-  "debug": false,
-  "questOrderDebug": true
+  "overHaulDebug": false,
+  "adjusterDebug": false
 }

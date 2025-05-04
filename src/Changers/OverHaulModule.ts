@@ -32,7 +32,7 @@ import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 import { RewardType } from "@spt/models/enums/RewardType";
 import { IReward } from "@spt/models/eft/common/tables/IReward";
 
-export default function UpdateQuestOrder(
+export default function OverHaulModule(
   container: DependencyContainer
 ): undefined {
   const configServer = container.resolve<ConfigServer>("ConfigServer");
@@ -165,17 +165,17 @@ export default function UpdateQuestOrder(
       if (deleteReqsSet.has(quest.QuestName)) {
         const key = Object.keys(deleteReqList[quest.QuestName])[0];
         const values = new Set(deleteReqList[quest.QuestName][key]);
-        // console.log(
-        //   "\nBefore",
-        //   quest.QuestName,
-        //   quest.conditions.AvailableForFinish.length
-        // );
+        console.log(
+          "\nBefore",
+          quest.QuestName,
+          quest.conditions.AvailableForFinish.length
+        );
         quest.conditions.AvailableForFinish =
           quest.conditions.AvailableForFinish.filter(
             (req) => !values.has(req[key])
           );
 
-        // console.log("after", quest.conditions.AvailableForFinish.length);
+        console.log("after", quest.conditions.AvailableForFinish.length);
       }
 
       if (adjustReqsSet.has(quest.QuestName)) {
@@ -191,7 +191,7 @@ export default function UpdateQuestOrder(
     }
   });
 
-  if (config.questOrderDebug) {
+  if (config.overHaulDebug) {
     console.log("\nTrader unlock quests: ");
   }
   // Setup initial traders for unlock
@@ -203,7 +203,7 @@ export default function UpdateQuestOrder(
       traders[traderId].base.unlockedByDefault = false;
       const questId = questMapper[questNameForUnlock];
 
-      if (config.questOrderDebug) {
+      if (config.overHaulDebug) {
         console.log(
           `${traderName} is unlocked by completing: ${questNameForUnlock}`
         );
@@ -211,7 +211,7 @@ export default function UpdateQuestOrder(
 
       quests[questId].rewards.Success.push(traderUnlockSuccessByID(traderId));
     } else {
-      if (config.questOrderDebug) {
+      if (config.overHaulDebug) {
         console.log(`${traderName} is unlocked by default`);
       }
       traders[traderId].base.unlockedByDefault = true;
@@ -232,12 +232,12 @@ export default function UpdateQuestOrder(
     );
   }
 
-  config.questOrderDebug &&
+  config.overHaulDebug &&
     console.log("\nQuests required for fence/kappa unlock: ");
 
   // Add required quests for unlocking fence
   FenceStartRequiredQuests.forEach((questName) => {
-    config.questOrderDebug && console.log(questName);
+    config.overHaulDebug && console.log(questName);
     const questId = questMapper[questName];
     if (!questId) {
       console.log(`!!! fence required quest ${questName} not found !!!`);
@@ -527,14 +527,14 @@ export default function UpdateQuestOrder(
   //   );
   // });
 
-  saveToFile(
-    traders[Traders.PRAPOR].assort.loyal_level_items,
-    "refDBS/loyal_level_items.json"
-  );
+  // saveToFile(
+  //   traders[Traders.PRAPOR].assort.loyal_level_items,
+  //   "refDBS/loyal_level_items.json"
+  // );
   // saveToFile(traderQuestList, "refDBS/traderQuestList.json");
-  saveToFile(reward, "refDBS/reward.json");
+  // saveToFile(reward, "refDBS/reward.json");
   // saveToFile(flattenedTraderList, "refDBS/flattenedTraderList.json");
-  saveToFile(quests, "refDBS/quests.json");
+  // saveToFile(quests, "refDBS/quests.json");
 
   console.log("\n[QuestingReimagined] Changes Complete");
 }

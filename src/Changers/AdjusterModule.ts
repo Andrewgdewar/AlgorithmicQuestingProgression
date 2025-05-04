@@ -14,7 +14,7 @@ import { IQuest } from "@spt/models/eft/common/tables/IQuest";
 import { RewardType } from "@spt/models/enums/RewardType";
 import { QuestTypeEnum } from "@spt/models/enums/QuestTypeEnum";
 
-export default function GlobalChanges(
+export default function AdjusterModule(
   container: DependencyContainer
 ): undefined {
   const databaseServer = container.resolve<DatabaseServer>("DatabaseServer");
@@ -134,7 +134,7 @@ export default function GlobalChanges(
               ]
             )
             .replace("<number>", killQuest.value + "");
-          if (config.debug && lang === "en") {
+          if (config.adjusterDebug && lang === "en") {
             console.log(global[lang][descriptionId]);
             console.log(global[lang][taskId]);
           }
@@ -163,7 +163,7 @@ export default function GlobalChanges(
               ]
             )
             .replace("<number>", killQuest.value + "");
-          if (config.debug && lang === "en") {
+          if (config.adjusterDebug && lang === "en") {
             console.log("Gunsmith number", currentQuestNumber);
             console.log(global[lang][descriptionId]);
             console.log(global[lang][taskId]);
@@ -233,5 +233,5 @@ export default function GlobalChanges(
     }
   }); //67a8d5cf7aa8a5f2769bf66f
 
-  config.debug && console.log("QuestDifficultyTweaker - Changes Complete");
+  config.adjusterDebug && console.log("QuestDifficultyTweaker - Changes Complete");
 }
