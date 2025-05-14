@@ -92,10 +92,31 @@ export default function OverHaulModule(
   });
 
   //Create a set of quests that are usable
+  // Only touch quests from the trader whitelist
+  const traderWhitelist = [
+    "PRAPOR",
+    "THERAPIST",
+    "SKIER",
+    "PEACEKEEPER",
+    "MECHANIC",
+    "RAGMAN",
+    "JAEGER",
+    "FENCE",
+    "LIGHTHOUSEKEEPER",
+    "REF",
+    "BTR"
+  ];
 
   // Create a reverse mapping of traders to their names
   const traderMapper = {};
   Object.keys(Traders).forEach((name) => {
+    if(!traderWhitelist.includes(name)) {
+      if(config.overHaulDebug) {
+        console.log(`!!! ${Traders[name]} ${name} is not a known trader !!!`);
+      }
+      return;
+    }
+
     traderMapper[Traders[name]] = name;
   });
 
@@ -133,9 +154,13 @@ export default function OverHaulModule(
     const quest = quests[questId];
     // Set quests not in the list to be infinite level requirement
     if (!usedQuestIdsSet.has(questId)) {
-      quest.conditions.AvailableForStart = [
-        AvailableForStartLevelRequirement(99, questId + "remove"),
-      ];
+      if(traderMapper[quest.traderId]) { // Only remove from known traders
+        quest.conditions.AvailableForStart = [
+          AvailableForStartLevelRequirement(99, questId + "remove"),
+        ];
+      } else if (config.overHaulDebug) {
+        console.log(`Keeping quest: ${Traders[quest.traderId]} ${quest.QuestName}`);
+      }
     } else {
       // Zero out available for start
       quest.conditions.AvailableForStart = [];
