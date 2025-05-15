@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { DependencyContainer } from "tsyringe";
-import { IPostSptLoadMod } from "@spt/models/external/IPostSptLoadMod";
+import { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
 import {
   enableAdjusterModule,
   enableOverhaulModule,
@@ -10,8 +10,8 @@ import {
 import OverHaulModule from "./Changers/OverHaulModule";
 import AdjusterModule from "./Changers/AdjusterModule";
 
-class AlgorithmicQuestingProgression implements IPostSptLoadMod {
-  postSptLoad(container: DependencyContainer): void {
+class AlgorithmicQuestingProgression implements IPostDBLoadMod {
+  postDBLoad(container: DependencyContainer): void {
     if (enableOverhaulModule || enableAdjusterModule) {
       try {
         if (overHaulDebug || adjusterDebug)
